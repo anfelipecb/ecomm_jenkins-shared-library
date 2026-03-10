@@ -32,11 +32,11 @@ git init
 git add .
 git commit -m "Initial shared library"
 git branch -M main
-git remote add origin https://github.com/YOUR_USERNAME/jenkins-shared-library.git
+git remote add origin https://github.com/YOUR_USERNAME/ecomm_jenkins-shared-library.git
 git push -u origin main
 ```
 
-Replace `YOUR_USERNAME` with your GitHub username (e.g. `andresfcamacho`).
+Replace `YOUR_USERNAME` with your GitHub username (e.g. `anfelipecb`).
 
 **Yes, you need to create the repo on GitHub first** – Jenkins fetches the library from the Git URL.
 

@@ -53,6 +53,7 @@ approveProdDeploy()  // when PIPELINE_ENV == 'prod'
 - **Tag format:** `{BUILD_NUMBER}-git-{shortCommit}-v{version}` (e.g. `2-git-a8a21b0-v1.0.0`).
 - **Version:** From `package.json` (set `env.APP_VERSION` before calling) or optional 3rd parameter; default `0.0.0`.
 - **Full image reference:** After push, `env.FULL_IMAGE` is set (e.g. `afcamachob/ecomm-product-service:2-git-a8a21b0-v1.0.0`) for use in Deploy / Kubernetes.
+- **Push:** Only the versioned tag is pushed (no `latest`) to avoid Docker Hub second-push failures on webhook-triggered builds.
 
 ## Available Steps
 

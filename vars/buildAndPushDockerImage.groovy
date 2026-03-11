@@ -14,7 +14,7 @@ def call(String imageName, String credentialsId = 'docker-hub-credentials', Stri
     env.IMAGE_TAG = imageTag
 
     echo "Building Docker image ${imageName}:${imageTag}"
-    sh "docker build -t ${imageName}:${imageTag} -t ${imageName}:latest ."
+    sh "docker build -t ${imageName}:${imageTag} ."
 
     withCredentials([usernamePassword(
         credentialsId: credentialsId,
@@ -27,9 +27,7 @@ def call(String imageName, String credentialsId = 'docker-hub-credentials', Stri
             export DOCKER_CONFIG=\$(mktemp -d)
             echo \$DOCKERHUB_PASS | docker login -u \$DOCKERHUB_USER --password-stdin
             docker tag ${imageName}:${imageTag} \$DOCKERHUB_USER/${imageName}:${imageTag}
-            docker tag ${imageName}:latest \$DOCKERHUB_USER/${imageName}:latest
             docker push \$DOCKERHUB_USER/${imageName}:${imageTag}
-            docker push \$DOCKERHUB_USER/${imageName}:latest
         """
     }
 }

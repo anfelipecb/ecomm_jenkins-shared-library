@@ -16,8 +16,9 @@ def call(String imageName, String credentialsId = 'docker-hub-credentials') {
         usernameVariable: 'DOCKERHUB_USER',
         passwordVariable: 'DOCKERHUB_PASS'
     )]) {
-        sh 'echo $DOCKERHUB_PASS | docker login -u $DOCKERHUB_USER --password-stdin'
         sh """
+            export DOCKER_CONFIG=\$(mktemp -d)
+            echo \$DOCKERHUB_PASS | docker login -u \$DOCKERHUB_USER --password-stdin
             docker tag ${imageName}:${imageTag} \$DOCKERHUB_USER/${imageName}:${imageTag}
             docker tag ${imageName}:latest \$DOCKERHUB_USER/${imageName}:latest
             docker push \$DOCKERHUB_USER/${imageName}:${imageTag}

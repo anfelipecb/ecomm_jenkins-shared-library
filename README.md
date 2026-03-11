@@ -48,12 +48,18 @@ buildAndPushDockerImage('ecomm-product-service')
 approveProdDeploy()  // when PIPELINE_ENV == 'prod'
 ```
 
+## Image tagging strategy
+
+- **Tag format:** `{BUILD_NUMBER}-git-{shortCommit}-v{version}` (e.g. `2-git-a8a21b0-v1.0.0`).
+- **Version:** From `package.json` (set `env.APP_VERSION` before calling) or optional 3rd parameter; default `0.0.0`.
+- **Full image reference:** After push, `env.FULL_IMAGE` is set (e.g. `afcamachob/ecomm-product-service:2-git-a8a21b0-v1.0.0`) for use in Deploy / Kubernetes.
+
 ## Available Steps
 
 | Step | Description |
 |------|-------------|
 | `detectEnvironment()` | Sets env.PIPELINE_ENV from branch (build/dev/staging/prod) |
-| `buildAndPushDockerImage(imageName)` | Builds and pushes Docker image to Docker Hub |
+| `buildAndPushDockerImage(imageName, credentialsId?, version?)` | Builds and pushes Docker image; sets env.IMAGE_TAG and env.FULL_IMAGE |
 | `approveProdDeploy()` | Pauses for manual approval (for prod deployments) |
 
 ## Pushing Updates

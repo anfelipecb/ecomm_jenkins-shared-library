@@ -9,6 +9,8 @@ jenkins-shared-library/
 ├── vars/
 │   ├── detectEnvironment.groovy      # Detects build/dev/staging/prod from branch
 │   ├── buildAndPushDockerImage.groovy # Build and push to Docker Hub
+│   ├── deployToK8s.groovy            # Apply manifests and set deployment image
+│   ├── validateK8sManifests.groovy   # Dry-run validation of manifests before deploy
 │   └── approveProdDeploy.groovy      # Manual approval for production
 ├── .gitignore
 └── README.md
@@ -46,6 +48,8 @@ Then call the steps:
 detectEnvironment()
 buildAndPushDockerImage('ecomm-product-service')
 approveProdDeploy()  // when PIPELINE_ENV == 'prod'
+validateK8sManifests(['deployment.yaml', 'service.yaml'])  // before Deploy
+deployToK8s('ecomm-product-service', 'product-service', ['deployment.yaml', 'service.yaml'])
 ```
 
 ## Image tagging strategy
@@ -61,6 +65,8 @@ approveProdDeploy()  // when PIPELINE_ENV == 'prod'
 |------|-------------|
 | `detectEnvironment()` | Sets env.PIPELINE_ENV from branch (build/dev/staging/prod) |
 | `buildAndPushDockerImage(imageName, credentialsId?, version?)` | Builds and pushes Docker image; sets env.IMAGE_TAG and env.FULL_IMAGE |
+| `validateK8sManifests(manifestFiles, placeholderImage?)` | Validates manifests with `kubectl apply --dry-run=client`; run before Deploy |
+| `deployToK8s(deploymentName, containerName, manifestFiles)` | Applies manifests and sets deployment image; uses minikube kubectl with PIPELINE_ENV profile |
 | `approveProdDeploy()` | Pauses for manual approval (for prod deployments) |
 
 ## Pushing Updates
